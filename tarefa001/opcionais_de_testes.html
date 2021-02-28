@@ -1,0 +1,78 @@
+<!--
+ *
+ * opcional.html
+ *
+ * Arquivo que define os elementos da página de listagem de opcionais.
+ *
+-->
+{% extends 'base.html' %}
+
+{% block corpo_pagina %}
+        <title>Opcionais - PortalERP</title>
+    </head>
+    <body class="page" ng-app>
+        <div id="principal" class="clearfix">
+            {% if staff == 0 %}
+                {% include 'menu.html' %}
+            {% else %}
+                {% include 'menu_administrativo.html' %}
+            {% endif %}
+            <article class="conteudo">
+                <div class="container">
+                    <div class="bloco">
+                        <div class="linha-topo">
+                            <h1><i class="fa fa-file-text-o"></i> Opcionais de Testes</h1>
+                        </div>
+                        <div class="bloco-conteudo">
+                            <div class="container_opcoes">
+                                &nbsp;&nbsp;
+                                Exibir &nbsp;&nbsp;
+                                <button id="botao_todos" type="button" class="btn btn-default">Todos</button>
+                                <button id="botao_ativo" type="button" class="btn btn-active">Ativos</button>
+                                <button id="botao_desativado" type="button" class="btn btn-default">Desativados</button>                               
+                            </div>
+                        </div>
+                    </div>
+                    </br>
+                    <div>
+                        <a href="{% url "filtrar_relatorio_opcionaisTestes" %}?formato=0&imprimir=S">
+                            <button type="button" class="btn btn-danger">
+                                Exportar PDF
+                            </button>
+                        </a>
+                        <a href="{% url "filtrar_relatorio_opcionaisTestes" %}?formato=1&imprimir=S">
+                            <button type="button" class="btn btn-info" id="botao_exportar_xls">
+                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                Exportar Planilha
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </div>
+{% endblock %}
+{% block javascript_footer %}
+    <script type="text/javascript">
+        // Coloca aviso de Tela em Manutenção
+        //manutencao  = true;
+        //programador = 'AddMob';
+        //objetivo    = 'Correções Diversas.';
+        var permissaoEdicao = false;
+        // URL de pesquisa de opcionais
+        var urlPesquisa = "/pesquisar_opcionaisTestes";
+        // URL de ativação/inativação de opcionais
+        var urlAtivarInativar = "/inativar_opcionais";
+        // Recebe o número de campos que serão exibidos por padrão
+        var camposSelecionadoPadrao = 5;
+
+        {% if permissoes.opcional.alt == 1 or staff != 0 %}
+            permissaoEdicao = true;
+        {% endif %}
+        // Define o nome da tabela
+        nomeTabela = "tabela_opcionais_testes";
+        // Cria o evento de split do menu de campos da tabela
+        CreateSplit();
+        // Cria a tabela de listagem de opcionais
+        criarTabela('/obter_campos_opcionaisTestes');
+    </script>
+{% endblock %}
